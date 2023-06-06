@@ -21,15 +21,15 @@ public class ArvoreAVL {
 
     private NoCelula incrementaContador(NoCelula raiz, NoCelula buscando) {
         if(raiz!=null) {
-            if(raiz.nome == buscando.nome) {
+            if(raiz.nome == buscando.nome) { //Busca pelo conteudo desejado
                 raiz.contador++;
                 return raiz;
             }
-            else if(buscando.nome.compareToIgnoreCase(raiz.nome) < 0)
+            else if(buscando.nome.compareToIgnoreCase(raiz.nome) < 0) //Caminha a esquerda (nomes menores)
                 raiz.Aesq = incrementaContador(buscando, raiz.Aesq);
-            else if(buscando.nome.compareToIgnoreCase(raiz.nome) > 0)
+            else if(buscando.nome.compareToIgnoreCase(raiz.nome) > 0) //Caminha a direita (nomes maiores)
                 raiz.Adir = incrementaContador(buscando, raiz.Adir);
         }
-        return raiz;
+        return raiz; //Return para efetivar a alteração dentro da arvore
     }
 }
