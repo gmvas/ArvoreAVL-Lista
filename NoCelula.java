@@ -15,7 +15,7 @@ public class NoCelula {
     }
 
     NoCelula(String nome) { //Construtor com conteudo
-        this.nome = nome;
+        this.nome = nome.toUpperCase(); //Strings todas em letra maiscula afim de não haver conflitos de nome por conta de letras maiusculas
         contador++; //Novo nome indica uma aparicao de pelo menos 1 vez
         Aesq = null;
         Adir = null;
