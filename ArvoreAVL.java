@@ -32,4 +32,14 @@ public class ArvoreAVL {
         }
         return raiz; //Return para efetivar a alteração dentro da arvore
     }
+
+    private void listar(NoCelula raiz) { //Listagem por caminhamento central
+        listar(raiz.Aesq);
+        System.out.println("- " + raiz.nome);
+        listar(raiz.Adir);
+    }
+
+    public void listar() {
+        listar(raiz);
+    }
 }
