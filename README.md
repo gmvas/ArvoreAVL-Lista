@@ -1,4 +1,5 @@
 # ArvoreAVL Lista
- Uma Árvore Binária AVL com uma Lista Duplamente encadeada inclusa dentro de sua propria celular, sendo assim um híbrido entre as duas estruturas
+ Uma Árvore Binária AVL com integração de uma Lista Duplamente Encadeada para uma ordenação diferente da provida pela árvore
  
-Feito para um trabalho da faculdade, e previamente discutido com o professor do curso, chegando em uma conclusão de montar uma estrutura híbrida invés de duas diferentes estruturas, afim de propor um desafio diferente, visando um mlehor conhecimento em estruturas híbridas assim como salvar espaço da memória
+Feito para um trabalho da faculdade, o objetivo é montar uma Árvore Binária para armazenamento de diversos nomes, sendo que nomes repetidos serão adicionados ao contador de um Nó já existente
+O contador será usado para a ordenação da Lista com a incidencia dos nomes presentes na Árvore
