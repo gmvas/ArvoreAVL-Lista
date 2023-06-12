@@ -1,5 +1,5 @@
 public class ArvoreAVL {
-    private No raiz;
+    No raiz;
 
     private No inserir(No raiz, No novo) {
         if(raiz == null) { //Situação de nova insercao na arvore
@@ -24,10 +24,6 @@ public class ArvoreAVL {
             raiz.contador++;
         }
         return raiz; //Return para efetivar a alteração dentro da arvore
-    }
-
-    public No getRaiz(){
-        return raiz;
     }
 
     private void listar(No raiz) { //Listagem por caminhamento central
