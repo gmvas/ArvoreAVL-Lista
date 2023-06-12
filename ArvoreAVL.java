@@ -9,7 +9,7 @@ public class ArvoreAVL {
             raiz.esq = inserir(novo, raiz.esq);
         else if(novo.nome.compareToIgnoreCase(raiz.nome) > 0) //Buscando caminho de itens maiores
             raiz.dir = inserir(novo, raiz.dir);
-        else incrementaContador(raiz, novo);
+        else raiz = incrementaContador(raiz, novo); //Situacao onde o No ja exista - Nao ha nenhum menor ou maior
 
         return raiz;
     }
@@ -20,17 +20,14 @@ public class ArvoreAVL {
     }
 
     private No incrementaContador(No raiz, No buscando) {
-        if(raiz!=null) {
-            if(raiz.nome == buscando.nome) { //Busca pelo conteudo desejado
-                raiz.contador++;
-                return raiz;
-            }
-            else if(buscando.nome.compareToIgnoreCase(raiz.nome) < 0) //Caminha a esquerda (nomes menores)
-                raiz.esq = incrementaContador(buscando, raiz.esq);
-            else if(buscando.nome.compareToIgnoreCase(raiz.nome) > 0) //Caminha a direita (nomes maiores)
-                raiz.dir = incrementaContador(buscando, raiz.dir);
+        if(raiz.nome == buscando.nome) { //Ceretificando se os nomes sao iguais
+            raiz.contador++;
         }
         return raiz; //Return para efetivar a alteração dentro da arvore
+    }
+
+    public No getRaiz(){
+        return raiz;
     }
 
     private void listar(No raiz) { //Listagem por caminhamento central
