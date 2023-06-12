@@ -1,6 +1,7 @@
 public class No {
     String nome;
-    int contador = 0;
+    int contador;
+    int altura;
     No esq; //No a esquerda
     No dir; //No a direita
 
@@ -10,9 +11,10 @@ public class No {
         dir = null;
     }
 
-    No(String nome) { //Construtor com conteudo - para arvore binaria
+    No(String nome) { //Construtor de folhas para arvore binaria
         this.nome = nome.toUpperCase(); //Strings todas em letra maiscula afim de não haver conflitos de nome por conta de letras maiusculas
-        contador++; //Novo nome indica uma aparicao de pelo menos 1 vez
+        contador = 1; //Novo nome indica uma aparicao de pelo menos 1 vez
+        altura = 1; //Uma nova folha sempre tera a altura de 1
         esq = null;
         dir = null;
     }
