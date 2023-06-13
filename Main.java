@@ -5,26 +5,31 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        ArvoreAVL arvore;
-        ListaDupla lista;
+        ArvoreAVL arvore = new ArvoreAVL();
+        ListaDupla lista = new ListaDupla();
 
         //Arbertura e Leitura do arquivo contendo nomes
         File arq = new File("nomesArvore.txt");
         BufferedReader leitor = new BufferedReader(new FileReader(arq));
-        String arquivo = leitor.readLine();
+        String arquivo = leitor.readLine(); //Leitura da primeira linha
 
-        //implementar um while para leitura do arquivo / implementar um arquivo.split para separar as palavras dos demais
-        while(arquivo != null) {
-            String simbolos = arquivo.replaceAll("[a-zA-Z]+", " "); //Busca todos simbolos que nao sejam letras
-            String []nomes = arquivo.split(simbolos );
-            for (int i = 0; i < nomes.length; i++) { //TODO: Verificar o porque do split nao estar removendo pontuação, ou encontrar outro metodo
-                System.out.println(nomes[i] + "-");                
+        while(arquivo != null) { //Condição para a leitura do arquivo constante
+            String textoSujo = arquivo.replaceAll("\\p{P}", ""); //Substitui todas as pontuações do texto e as remove
+            String []nomes = textoSujo.split(" "); //Pega o texto sem pontuação e cria 
+            for (int i = 0; i < nomes.length; i++) { 
+                arvore.inserir(nomes[i]); //Inserção dos nomes individualmente na Arvore
             }
-            arquivo = leitor.readLine();
+            arquivo = leitor.readLine(); //Le a proxima linha
         }
+        lista.obterConteudo(arvore.raiz, lista.primeiro, lista.ultimo); //Obtendo conteudo da ArvoreAVL para a ListaDupla
 
-
-
+        // Exibição dos conteudos em diferentes ordens
+        System.out.println("Impressao Arvore Binaria - ordem lexografica:");
+        arvore.listar();
+        System.out.println("Impressao Lista Dupla - ordem de incidencia:");
+        lista.listar();
+        
+        //Fechamento do leitor para não vazar memória
         leitor.close();
     }
 }
