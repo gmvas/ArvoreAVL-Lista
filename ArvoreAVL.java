@@ -1,6 +1,10 @@
 public class ArvoreAVL {
     No raiz;
 
+    ArvoreAVL() {
+        raiz = new No();
+    }
+
     private No inserir(No raiz, No novo) {
         if(raiz == null) { //Situação de nova insercao na arvore
             raiz = novo; 
