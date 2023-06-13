@@ -14,6 +14,14 @@ public class Main {
         String arquivo = leitor.readLine();
 
         //implementar um while para leitura do arquivo / implementar um arquivo.split para separar as palavras dos demais
+        while(arquivo != null) {
+            String simbolos = arquivo.replaceAll("[a-zA-Z]+", " "); //Busca todos simbolos que nao sejam letras
+            String []nomes = arquivo.split(simbolos );
+            for (int i = 0; i < nomes.length; i++) { //TODO: Verificar o porque do split nao estar removendo pontuação, ou encontrar outro metodo
+                System.out.println(nomes[i] + "-");                
+            }
+            arquivo = leitor.readLine();
+        }
 
 
 
