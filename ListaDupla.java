@@ -41,12 +41,15 @@ public class ListaDupla {
         return raizLista;
     }
 
-    public void listar(No primeiro) {
+    private void listar(No primeiro) {
         if(primeiro!=null){ //Verifica pela existencia de conteudo
             System.out.print("Nome: " + primeiro.nome);
             System.out.println(" - Frequencia: " + primeiro.contador);
             listar(primeiro.dir); //Caminha para o proximo No
         }
-        
+    }
+
+    public void listar() {
+        listar(primeiro.dir); // O primeiro No da lista é sempre vazio
     }
 }
