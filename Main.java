@@ -21,11 +21,12 @@ public class Main {
             }
             arquivo = leitor.readLine(); //Le a proxima linha
         }
-        lista.obterConteudo(arvore.raiz, lista.primeiro, lista.ultimo); //Obtendo conteudo da ArvoreAVL para a ListaDupla
+        lista.obterConteudo(arvore.raiz); //Obtendo conteudo da ArvoreAVL para a ListaDupla
 
         // Exibição dos conteudos em diferentes ordens
         System.out.println("Impressao Arvore Binaria - ordem lexografica:");
         arvore.listar();
+        System.out.println("\n---------------------------------------------");
         System.out.println("Impressao Lista Dupla - ordem de incidencia:");
         lista.listar();
         
