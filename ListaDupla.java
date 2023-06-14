@@ -3,27 +3,40 @@ public class ListaDupla {
     No ultimo; //Menor elemento da Lista - ultimo elemento
 
     ListaDupla() {
-        primeiro = new No();
+        primeiro = new No(); //Sempre ficara vazio para facilitar a insercao
         ultimo = primeiro;
     }
 
-    public void obterConteudo(No raizArvore, No primeiro, No ultimo) { //Metodo para copiar a Arvore para a Lista - deve ser usado no main
-        if(primeiro.dir == null) { //Primeira inserção na Lista
-            No aux = new No(raizArvore);
-            aux.dir = primeiro.esq;
-            aux.esq = primeiro;
-            primeiro.dir = aux;
-            ultimo = aux;
-        }   
-        else primeiro = transfConteudoNo(raizArvore, ultimo); //Inserção no meio da Lista
+    public void obterConteudo(No raizArvore) {
+        if(raizArvore != null){ //Caminhamento central da Arvore para inserção na Lista
+            obterConteudo(raizArvore.esq);
+            obterConteudo(raizArvore, primeiro, ultimo);
+            obterConteudo(raizArvore.dir);
+        }
     }
 
-    private No transfConteudoNo(No raizArvore, No raizLista) { //Metodo para transferir conteudo entre Nos
+    private void obterConteudo(No raizArvore, No primeiro, No ultimo) { //Metodo para copiar a Arvore para a Lista - deve ser usado no main
+        if(primeiro.dir == null) { //Primeira inserção na Lista
+            No aux = new No(raizArvore);
+            aux.dir = primeiro.dir;
+            aux.esq = primeiro;
+            primeiro.dir = aux;
+            ultimo = aux; //PROBLEMA ULTIMO NÃO MODIFICA PARA AUX
+        }   
+        else if(raizArvore.contador < ultimo.contador) { //Inserção no fim da Lista
+            ultimo.dir = new No(raizArvore);
+            ultimo.dir.esq = ultimo;
+            ultimo = ultimo.dir;
+        }
+        else primeiro = obterConteudoMeio(raizArvore, ultimo); //Inserção no meio da Lista
+    }
+
+    private No obterConteudoMeio(No raizArvore, No raizLista) { //Metodo para inserir um No no meio da Lista
         if(raizArvore.contador > raizLista.esq.contador && raizArvore.contador > raizLista.contador) { //Caminhamento para achar o devido local
-            raizLista = transfConteudoNo(raizArvore, raizLista.dir);
+            raizLista = obterConteudoMeio(raizArvore, raizLista.dir);
         }
         else {
-            //Transferencia de conteudos de No e de apontadores
+            //Mudança de apontadores do No
             No aux = new No();
             aux.esq = raizLista.esq;
             aux.dir = raizLista;
@@ -35,7 +48,7 @@ public class ListaDupla {
             aux.nome = raizArvore.nome;
             aux.contador = raizArvore.contador;
 
-            aux = null; // Esvaziando No auxiliars (seguindo como indicado no slide)
+            aux = null; // Esvaziando No auxiliar (seguindo como indicado no slide)
         }
 
         return raizLista;
@@ -53,3 +66,12 @@ public class ListaDupla {
         listar(primeiro.dir); // O primeiro No da lista é sempre vazio
     }
 }
+
+/*
+ * TODO LIST - LISTA DUPLA
+ * 
+ * Encadeamento duplo - feito
+ * Contrutor - feito (ok)
+ * Transferencia de conteudo - feito (PROBLEMA)
+ * Listamento - feito (ok)
+ */
