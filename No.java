@@ -22,7 +22,25 @@ public class No {
     No(No existente) { //Construtor para criacao de Nos da ListaDupla
         this.nome = existente.nome;
         this.contador = existente.contador;
-        this.esq = null;
+        this.altura = existente.altura;
+        this.esq = null; //Mantendo apontadores vazios para a atribuição manual dos devidos Nós
         this.dir = null;
     }
+
+    public void setAltura() { //Calcula o nivel total de vertice X
+        this.altura = 1 + Math.max(esq.altura, dir.altura);
+    }
+
+    public No copia(No alvo, No copiando) {
+        alvo = copiando;
+        return alvo;
+    }
 }
+
+/*
+ * TODO LIST - CLASSE NO
+ * 
+ * Conteudos - feito (ok)
+ * Contrutores - feito (ok)
+ * setAltura - feito (ok)
+ */
