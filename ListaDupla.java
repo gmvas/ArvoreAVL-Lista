@@ -10,18 +10,17 @@ public class ListaDupla {
     public void obterConteudo(No raizArvore) {
         if(raizArvore != null){ //Caminhamento central da Arvore para inserção na Lista
             obterConteudo(raizArvore.esq);
-            obterConteudo(raizArvore, primeiro, ultimo);
+            ultimo = obterConteudo(raizArvore, primeiro, ultimo); //Fixando o novo No ultimo (caso tenha)
             obterConteudo(raizArvore.dir);
         }
     }
 
-    private void obterConteudo(No raizArvore, No primeiro, No ultimo) { //Metodo para copiar a Arvore para a Lista - deve ser usado no main
+    private No obterConteudo(No raizArvore, No primeiro, No ultimo) { //Metodo para copiar a Arvore para a Lista - deve ser usado no main
         if(primeiro.dir == null) { //Primeira inserção na Lista
-            No aux = new No(raizArvore);
-            aux.dir = primeiro.dir;
+            No aux = new No(raizArvore); //Criando o novo No
             aux.esq = primeiro;
             primeiro.dir = aux;
-            ultimo = aux; //PROBLEMA ULTIMO NÃO MODIFICA PARA AUX
+            ultimo = aux; //Apontando para o novo ultimo
         }   
         else if(raizArvore.contador < ultimo.contador) { //Inserção no fim da Lista
             ultimo.dir = new No(raizArvore);
@@ -29,6 +28,8 @@ public class ListaDupla {
             ultimo = ultimo.dir;
         }
         else primeiro = obterConteudoMeio(raizArvore, ultimo); //Inserção no meio da Lista
+
+        return ultimo;
     }
 
     private No obterConteudoMeio(No raizArvore, No raizLista) { //Metodo para inserir um No no meio da Lista
@@ -66,12 +67,3 @@ public class ListaDupla {
         listar(primeiro.dir); // O primeiro No da lista é sempre vazio
     }
 }
-
-/*
- * TODO LIST - LISTA DUPLA
- * 
- * Encadeamento duplo - feito
- * Contrutor - feito (ok)
- * Transferencia de conteudo - feito (PROBLEMA)
- * Listamento - feito (ok)
- */

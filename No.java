@@ -30,17 +30,4 @@ public class No {
     public void setAltura() { //Calcula o nivel total de vertice X
         this.altura = 1 + Math.max(esq.altura, dir.altura);
     }
-
-    public No copia(No alvo, No copiando) {
-        alvo = copiando;
-        return alvo;
-    }
 }
-
-/*
- * TODO LIST - CLASSE NO
- * 
- * Conteudos - feito (ok)
- * Contrutores - feito (ok)
- * setAltura - feito (ok)
- */
