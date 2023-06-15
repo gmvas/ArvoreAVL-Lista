@@ -1,0 +1,276 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        //Declaração das estruturas utilizadas
+        ArvoreAVL arvore = new ArvoreAVL();
+        ListaDupla lista = new ListaDupla();
+
+        //Arbertura e Leitura do arquivo contendo nomes
+        File arq = new File("nomesArvore.txt"); //Abertura do arquivo contendo os nomes
+        BufferedReader leitor = new BufferedReader(new FileReader(arq)); //Leitor do arquivo
+        String arquivo = leitor.readLine(); //Leitura da primeira linha para pré-carregar
+
+        while(arquivo != null) { //Condição para a leitura do arquivo constante
+            String textoSujo = arquivo.replaceAll("\\p{P}", ""); //Substitui todas as pontuações do texto e as remove
+            String []nomes = textoSujo.split(" "); //Pega o texto sem pontuação e cria 
+            for (int i = 0; i < nomes.length; i++) { 
+                arvore.inserir(nomes[i]); //Inserção dos nomes individualmente na Arvore
+            }
+            arquivo = leitor.readLine(); //Le a proxima linha
+        }
+        lista.obterConteudo(arvore.getRaiz()); //Obtendo conteudo da ArvoreAVL para a ListaDupla
+
+        // Exibição dos conteudos em diferentes ordens
+        System.out.println("Impressao Arvore Binaria - ordem lexografica:");
+        arvore.listar();
+        System.out.println("\n---------------------------------------------");
+        System.out.println("Impressao Lista Dupla - ordem de incidencia:");
+        lista.listar();
+        
+        //Fechamento do leitor para não vazar memória
+        leitor.close();
+    }
+}
+
+public class No {
+    String nome;
+    int contador;
+    int altura;
+    No esq; //No a esquerda
+    No dir; //No a direita
+
+    //Construtor vazio para um No vazio
+    No() {
+        this.nome = null;
+        esq = null;
+        dir = null;
+    }
+
+    //Construtor de No com conteudo
+    No(String nome) {
+        this.nome = nome.toUpperCase(); //Strings todas em letra maiscula afim de não haver conflitos de nome por conta de letras maiusculas
+        contador = 1; //Novo nome indica uma aparicao de pelo menos 1 vez
+        altura = 1; //Uma nova folha sempre tera a altura de 1
+        esq = null;
+        dir = null;
+    }
+
+    //Construtor de No baseado de outro No
+    No(No existente) {
+        //Copiando dados do No existente
+        this.nome = existente.nome;
+        this.contador = existente.contador;
+        this.altura = existente.altura;
+
+        //Mantendo apontadores vazios para a atribuição manual dos devidos Nós
+        this.esq = null; 
+        this.dir = null;
+    }
+
+    //Metodo para calcular a nova altura do No
+    public void setAltura() { //Calcula o nivel total de vertice X
+        this.altura = 1 + Math.max(esq.altura, dir.altura);
+    }
+}
+
+public class ArvoreAVL {
+    private No raiz;
+
+    //Construtor base da Arvore
+    ArvoreAVL() { 
+        raiz = null;
+    }
+
+    //Metodo publico do inserir - faz uma chamada para o metodo privado, inserindo o no raiz
+    public void inserir(String nome) {
+        No novo = new No(nome);
+        raiz = inserir(raiz, novo); //Inserção de nome na árvore
+        raiz = balancear(raiz); //Balanceamento da árvore
+    }
+
+    //Metodo privado de inserir - faz a busca da posição correta na árvore e retorna a raiz com o nó inserido
+    private No inserir(No arvore, No novo) {
+        if(arvore == null) { //Criação de novo nó para inserir na árvore
+            arvore = new No(novo);
+        }
+        else if(novo.nome.compareToIgnoreCase(arvore.nome) < 0) //Buscando caminho de itens menores
+            arvore.esq = inserir(arvore.esq, novo);
+        else if(novo.nome.compareToIgnoreCase(arvore.nome) > 0) //Buscando caminho de itens maiores
+            arvore.dir = inserir(arvore.dir, novo);
+        else arvore = incrementaContador(arvore, novo); //No ja existente - Nao ha nenhum menor ou maior, contador é incrementado
+        
+        return arvore;
+    }
+
+    //Método privado de balanceamento - é chamado pós inserção para realizar manter a árvore balanceada para a próxima inserção
+    private No balancear(No no) {
+        if(no.esq != null && no.dir != null) { //Verificando por filhos para balancear
+            int fator = no.dir.altura - no.esq.altura; //Gerando o fator de balanceamento
+
+            if(Math.abs(fator) <= 1) //Verificando se o valor é 0 ou 1 - abs = modulo / valores sempre maiores que 0
+                no.setAltura();
+
+            else if (fator == 2) { //Desbalanceamento para a direita
+                int fatorDir = no.dir.dir.altura - no.dir.esq.altura; //Checando por desbalanceamento duplo
+
+                if(fatorDir == -1) { //Desbalanceamento duplo (esq.dir)
+                    no.dir = rotacionaDir(no.dir);
+                }
+                no = rotacionaEsq(no);
+            }
+            else if(fator == -2) { //Desbalanceamento para a esquerda
+                int fatorEsq = no.esq.dir.altura - no.esq.esq.altura; //Checando por desbalanceamento duplo
+
+                if(fatorEsq == 1) { //Desbalanceaamento duplo (dir.esq)
+                    no.esq = rotacionaEsq(no.esq);
+                }
+                no = rotacionaDir(no);
+            }
+            else {
+                System.out.println("Erro ao balancear no " + no.nome + " de altura " + no.altura); 
+            }
+        }
+        return no;
+    }
+
+    //Metodo privado de rotacionamento de Nó para a direita - chamado exclusivamente pelo balancear()
+    private No rotacionaDir(No no) {
+        //Criando No para auxilio da rotação
+        No noEsq = no.esq;
+		No noEsqDir = noEsq.dir;
+
+        //Mudando os conteudos dos Nos
+		noEsq.dir = no;
+		no.esq = noEsqDir;
+		no.setAltura(); //Atualiza o nivel do no
+		noEsq.setAltura(); //Atualiza o nivel do noEsq
+
+		return noEsq;
+    }
+
+    //Metodo privado de rotacionamento de Nó para a esquerda - chamado exclusivamente pelo balancear()
+    private No rotacionaEsq(No no) {
+        //Criando No para auxilio da rotação
+        No noDir = no.dir;
+		No noDirEsq = noDir.esq;
+
+        //Mudando os conteudos dos Nos
+        noDir.esq = no;
+		no.dir = noDirEsq;
+		no.setAltura(); // Atualiza o nivel do no
+		noDir.setAltura(); // Atualiza o nivel do noDir
+
+        return noDir;
+    }
+
+    //Metodo privado de incrementação dos contadores - em caso da inserção não achar uma posição maior ou menor para 
+    //o No novo, ele é enviado para ter o contador da sua raiz equivalente incrementada
+    private No incrementaContador(No raiz, No buscando) {
+        if(raiz.nome.equals(buscando.nome)) { //Ceretificando se os nomes sao iguais
+            raiz.contador++;
+        }
+        return raiz; //Return para efetivar a alteração dentro da arvore
+    }
+
+    //Metodo privado de listar - imprime o conteudo em ordem lexografica 
+    private void listar(No raiz) { 
+
+        //Listagem por caminhamento central
+        if(raiz != null){
+            listar(raiz.esq);
+            System.out.println("-> " + raiz.nome + " | " + raiz.contador);
+            listar(raiz.dir);
+        }
+    }
+
+    //Metodo publico listar - realiza a chamada para o metodo privado sem realizar a chamada da raiz no main
+    public void listar() {
+        listar(raiz);
+    }
+
+    //Metodo getRaiz - retorna o valor da raiz (raiz é privado)
+    public No getRaiz(){
+        return raiz;
+    }
+}
+
+public class ListaDupla {
+    private No primeiro; //Maior elemento da Lista - primeiro elemento
+    private No ultimo; //Menor elemento da Lista - ultimo elemento
+
+    //Construtor base da ListaDupla
+    ListaDupla() {
+        primeiro = new No(); //Sempre ficara vazio para facilitar a insercao
+        ultimo = primeiro;
+    }
+
+    //Metodo publico obterConteudo - realiza um caminhamento central pela Arvore, e chama o método de inserção privado com seus devidos parametros
+    public void obterConteudo(No raizArvore) {
+        if(raizArvore != null){ //Caminhamento pela Arvore para realizar inserção na Lista
+            obterConteudo(raizArvore.esq);
+            obterConteudo(raizArvore.dir);
+            ultimo = obterConteudo(raizArvore, primeiro, ultimo); //Fixando o novo No ultimo (caso tenha)
+        }
+    }
+
+    //Metodo privado obterConteudo - procura o devido local do No para ser inserido com base no seu contador
+    private No obterConteudo(No raizArvore, No primeiro, No ultimo) {
+        if(primeiro.dir == null) { //Primeira inserção na Lista
+            No aux = new No(raizArvore); //Criando o novo No
+            
+            //Mudanças no ponteiros
+            aux.esq = primeiro;
+            primeiro.dir = aux;
+            ultimo = aux; //Apontando para o novo ultimo
+        }   
+        else if(raizArvore.contador < ultimo.contador) { //Inserção no fim da Lista
+            ultimo.dir = new No(raizArvore); //Criação de um novo No
+            ultimo.dir.esq = ultimo; //Atribuindo ponteiro do novo No
+            ultimo = ultimo.dir; //Mudando No para qual 'ultimo' aponta
+        }
+        else primeiro = obterConteudoMeio(raizArvore, ultimo); //Inserção no meio da Lista
+
+        return ultimo;
+    }
+
+    //Metodo privado obterConteudoMeio - faz a busca na Lista pelo local onde o novo No será inserido e faz as devidas movimentações de apontadores
+    private No obterConteudoMeio(No raizArvore, No raizLista) { //Metodo para inserir um No no meio da Lista
+        if(raizLista.esq.nome != null && (raizArvore.contador > raizLista.esq.contador && raizArvore.contador > raizLista.contador)) { 
+            raizLista = obterConteudoMeio(raizArvore, raizLista.esq); //Caminhamento para achar o devido local
+        }
+        else {
+            //Mudança de apontadores do No
+            No aux = new No();
+            aux.esq = raizLista.esq;
+            aux.dir = raizLista;
+               
+            raizLista.esq = aux;
+            aux.esq.dir = aux;
+
+            //Transferindo conteudos da raiz da Arvore para a Lista
+            aux.nome = raizArvore.nome;
+            aux.contador = raizArvore.contador;
+
+            aux = null; // Esvaziando No auxiliar (seguindo como indicado no slide)
+        }
+        return raizLista;
+    }
+
+    //Metodo privado listar - lista todos os Nos em ordem decrescente 
+    private void listar(No primeiro) {
+        if(primeiro!=null){ //Verifica pela existencia de conteudo
+            System.out.print("Nome: " + primeiro.nome);
+            System.out.println(" - Frequencia: " + primeiro.contador);
+            listar(primeiro.dir); //Caminha para o proximo No
+        }
+    }
+
+    //Metodo listar publico - chama o método listar privado com seus devido parametros
+    public void listar() {
+        listar(primeiro.dir); // O primeiro No da lista é sempre vazio
+    }
+}
