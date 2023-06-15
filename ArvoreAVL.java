@@ -79,7 +79,7 @@ public class ArvoreAVL {
     }
 
     private No incrementaContador(No raiz, No buscando) {
-        if(raiz.nome == buscando.nome) { //Ceretificando se os nomes sao iguais
+        if(raiz.nome.equals(buscando.nome)) { //Ceretificando se os nomes sao iguais
             raiz.contador++;
         }
         return raiz; //Return para efetivar a alteração dentro da arvore
@@ -97,14 +97,3 @@ public class ArvoreAVL {
         listar(raiz);
     }
 }
-
-
-/*
- * TODO LIST - ARVORE AVL
- * 
- * Inserção - feito (ok)
- * Balanceamento - feito (ok)
- * Listar - feito (ok)
- * Incrementação de contador - feito (PROBLEMA)
- * Remoção - não necessario
- */
