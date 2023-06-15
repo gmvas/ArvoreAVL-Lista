@@ -33,8 +33,8 @@ public class ListaDupla {
     }
 
     private No obterConteudoMeio(No raizArvore, No raizLista) { //Metodo para inserir um No no meio da Lista
-        if(raizArvore.contador > raizLista.esq.contador && raizArvore.contador > raizLista.contador) { //Caminhamento para achar o devido local
-            raizLista = obterConteudoMeio(raizArvore, raizLista.dir);
+        if(raizLista.esq.nome != null && (raizArvore.contador > raizLista.esq.contador && raizArvore.contador > raizLista.contador)) { //Caminhamento para achar o devido local
+            raizLista = obterConteudoMeio(raizArvore, raizLista.esq);
         }
         else {
             //Mudança de apontadores do No
