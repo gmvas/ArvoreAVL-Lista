@@ -88,7 +88,7 @@ public class ArvoreAVL {
     private void listar(No raiz) { //Listagem por caminhamento central
         if(raiz != null){
             listar(raiz.esq);
-            System.out.println("- " + raiz.nome);
+            System.out.println("-> " + raiz.nome + " | " + raiz.contador);
             listar(raiz.dir);
         }
     }
